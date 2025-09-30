@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  portfolio:
+    build: .
+    container_name: anjana-portfolio
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    environment:
+      - PORT=8002
+      - HOST=0.0.0.0
+    volumes:
+      # Mount the current directory for development (optional)
+      - .:/app
+    networks:
+      - portfolio-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio.rule=Host(`localhost`)"
+      - "traefik.http.services.portfolio.loadbalancer.server.port=8002"
+
+networks:
+  portfolio-network:
+    driver: bridge
